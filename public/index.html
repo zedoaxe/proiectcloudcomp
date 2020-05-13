@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <head>
+        <title>Proiect Cloud Computing - Burlacu George</title>
+    </head>
+    <body
+        <div id="output"></div>
+        
+        <script>
+        
+        var latg;
+        var longg;
+        
+        function dateVreme(latitudeVreme, longitudeVreme)
+        {
+            $.ajax({
+            url: 'https://weather.ls.hereapi.com/weather/1.0/report.json',
+            type: 'GET',
+            dataType: 'jsonp',
+            jsonp: 'jsonpcallback',
+            data: {
+                product: 'observation',
+                latitude: latitudeVreme,
+                longitude: longitudeVreme,
+                oneobservation: 'true',
+                apiKey: 'mSu-e7R5n0wp9JZk4ScsKXacmeaS2DlB_OWG791AhIE'
+            },
+            success: function (data) {
+                var tempj = data.observations.location[0].observation[0].temperature;
+                var tempdescj = data.observations.location[0].observation[0].temperatureDesc;
+                var tempminj = data.observations.location[0].observation[0].lowTemperature;
+                var tempmaxj = data.observations.location[0].observation[0].highTemperature;
+                var skystatusj = data.observations.location[0].observation[0].skyDescription;
+                var windspeedj = data.observations.location[0].observation[0].windSpeed;
+                var humidj = data.observations.location[0].observation[0].humidity;
+                document.getElementById('templabel').innerHTML = tempj;
+                document.getElementById('desclabel').innerHTML = tempdescj;
+                document.getElementById('minlabel').innerHTML = tempminj;
+                document.getElementById('maxlabel').innerHTML = tempmaxj;
+                document.getElementById('skylabel').innerHTML = skystatusj;
+                document.getElementById('windlabel').innerHTML = windspeedj;
+                document.getElementById('humidlabel').innerHTML = humidj;
+            }
+            });
+        }
+        
+        function parsareJSONPiloti(){
+            if(this.readyState == 4 && this.status == 200)
+            {
+                var jsonn = JSON.parse(this.responseText);
+                var code = jsonn.MRData.DriverTable.Drivers[0].code;
+                var dob = jsonn.MRData.DriverTable.Drivers[0].dateOfBirth;
+                var driverid = jsonn.MRData.DriverTable.Drivers[0].driverId;
+                var familyname = jsonn.MRData.DriverTable.Drivers[0].familyName;
+                var givenname = jsonn.MRData.DriverTable.Drivers[0].givenName;
+                var nationality = jsonn.MRData.DriverTable.Drivers[0].nationality;
+                var permanentnumber = jsonn.MRData.DriverTable.Drivers[0].permanentNumber;
+                var urlwiki = jsonn.MRData.DriverTable.Drivers[0].url;
+                document.getElementById('codelabel').innerHTML = code;
+                document.getElementById('doblabel').innerHTML = dob;
+                document.getElementById('idlabel').innerHTML = driverid;
+                document.getElementById('famlabel').innerHTML = familyname;
+                document.getElementById('givenlabel').innerHTML = givenname;
+                document.getElementById('natlabel').innerHTML = nationality;
+                document.getElementById('permlabel').innerHTML = permanentnumber;
+                document.getElementById('urllabel').innerHTML = urlwiki;
+
+            }
+        }
+        
+        function parsareJSONCircuite(){
+            if(this.readyState == 4 && this.status == 200)
+            {
+                var jsonn = JSON.parse(this.responseText);
+                var circuitid = jsonn.MRData.CircuitTable.Circuits[0].circuitId;
+                var circuitname = jsonn.MRData.CircuitTable.Circuits[0].circuitName;
+                var circuitcountry = jsonn.MRData.CircuitTable.Circuits[0].Location.country;
+                var circuitlocality = jsonn.MRData.CircuitTable.Circuits[0].Location.locality;
+                var circuitlatitude = jsonn.MRData.CircuitTable.Circuits[0].Location.lat;
+                var circuitlongitude = jsonn.MRData.CircuitTable.Circuits[0].Location.long;
+                var circuiturl = jsonn.MRData.CircuitTable.Circuits[0].url;
+                document.getElementById('cidlabel').innerHTML = circuitid;
+                document.getElementById('cnamelabel').innerHTML = circuitname;
+                document.getElementById('ccountrylabel').innerHTML = circuitcountry;
+                document.getElementById('clocallabel').innerHTML = circuitlocality;
+                document.getElementById('clatlabel').innerHTML = circuitlatitude;
+                document.getElementById('clonglabel').innerHTML = circuitlongitude;
+                document.getElementById('curllabel').innerHTML = circuiturl;
+                
+                latg = circuitlatitude;
+                longg = circuitlongitude;
+                
+                dateVreme(latg, longg);
+                
+            }
+        }
+        
+        function importDatePiloti(){
+        
+        var indexnr = document.getElementById("piloti");
+        var pilotnume = indexnr.options[indexnr.selectedIndex].value;
+        
+        var myRequest = new XMLHttpRequest();
+        myRequest.overrideMimeType("application/json");
+        myRequest.onreadystatechange = parsareJSONPiloti;
+        myRequest.open("POST", "/driver", true);
+        myRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        myRequest.send(JSON.stringify({data: pilotnume}));
+        console.log(myRequest);
+        
+        }
+        
+        function importDateCircuite(){
+        
+        var indexnr = document.getElementById("circuite");
+        var circuitnume = indexnr.options[indexnr.selectedIndex].value;
+        
+        var myRequest = new XMLHttpRequest();
+        myRequest.overrideMimeType("application/json");
+        myRequest.onreadystatechange = parsareJSONCircuite;
+        myRequest.open("POST", "/circuit", true);
+        myRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        myRequest.send(JSON.stringify({data: circuitnume}));
+        console.log(myRequest);
+        
+        }
+        
+        
+        function test()
+        {
+            var myRequest = new XMLHttpRequest();
+            myRequest.overrideMimeType("application/json");
+            myRequest.open("GET", "http://ergast.com/api/f1/drivers/alonso.json", true);
+            myRequest.send(null);
+            console.log(myRequest);
+        }
+        
+        </script>
+        
+        <h1>Formula 1 : Informatii</h1>
+        <fieldset>
+        <legend>Cautare pentru un anumit pilot:</legend>
+        <h2>Formula 1 : Piloti</h2>
+        <p>Selecteaza din lista de mai jos pilotul pe care vrei sa il accesezi</p>
+        <select id="piloti" name="piloti">
+          <option value="alonso">Alonso</option>
+          <option value="duncan">Duncan</option>
+          <option value="hamilton">Hamilton</option>
+          <option value="abate">Abate</option>
+          <option value="abecassis">Abecassis</option>
+          <option value="acheson">Acheson</option>
+          <option value="adams">Adams</option>
+          <option value="ader">Ader</option>
+          <option value="senna">Senna</option>
+          <option value="brooks">Brooks</option>
+          <option value="burgess">Burgess</option>
+          <option value="craft">Craft</option>
+        </select>
+        <button onclick="importDatePiloti()">Afiseaza</button>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Date referitoare la pilotul selectat:</legend>
+        <label style="color:red"> CODE :</label>
+        <label id="codelabel"> ---- </label>
+        <label style="color:red"> DOB :</label>
+        <label id="doblabel"> ---- </label>
+        <label style="color:red"> ID :</label>
+        <label id="idlabel"> ---- </label>
+        <label style="color:red"> FAMILY NAME :</label>
+        <label id="famlabel"> ---- </label>
+        <label style="color:red"> GIVEN NAME :</label>
+        <label id="givenlabel"> ---- </label>
+        <label style="color:red"> NATIONALITY :</label>
+        <label id="natlabel"> ---- </label>
+        <label style="color:red"> PERMANENT NUMBER :</label>
+        <label id="permlabel"> ---- </label>
+        <label style="color:red"> WIKI :</label>
+        <label id="urllabel"> ---- </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Cautare pentru un anumit circuit:</legend>
+            <h2>Formula 1 : Circuite</h2>
+            <p>Selecteaza din lista de mai jos circuitul pe care vrei sa il accesezi</p>
+          <select id="circuite" name="circuite">
+          <option value="imola">Imola</option>
+          <option value="fuji">Fuji</option>
+          <option value="donington">Donington</option>
+          <option value="dallas">Dallas</option>
+          <option value="charade">Charade</option>
+          <option value="catalunya">Catalunya</option>
+          <option value="indianapolis">Indianapolis</option>
+          <option value="interlagos">Interlagos</option>
+          <option value="detroit">Detroit</option>
+          <option value="bahrain">Bahrain</option>
+          <option value="nurburgring">Nürburgring</option>
+          <option value="avus">Avus</option>
+        </select>
+        <button onclick="importDateCircuite()">Afiseaza</button>
+        </fieldset>
+
+        <fieldset>
+            <legend>Date referitoare la circuitul selectat:</legend>
+        <label style="color:red"> CIRCUIT ID :</label>
+        <label id="cidlabel"> ---- </label>
+        <label style="color:red"> CIRCUIT NAME :</label>
+        <label id="cnamelabel"> ---- </label>
+        <label style="color:red"> COUNTRY :</label>
+        <label id="ccountrylabel"> ---- </label>
+        <label style="color:red"> LOCALITY :</label>
+        <label id="clocallabel"> ---- </label>
+        <label style="color:red"> LATITUDE :</label>
+        <label id="clatlabel"> ---- </label>
+        <label style="color:red"> LONGITUDE :</label>
+        <label id="clonglabel"> ---- </label>
+        <label style="color:red"> WIKI :</label>
+        <label id="curllabel"> ---- </label>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Date meteorologice pentru circuitul selectat:</legend>
+                <label style="color:red"> TEMPERATURE :</label>
+                <label id="templabel"> ---- </label>
+                <label style="color:red"> DESCRIPTION :</label>
+                <label id="desclabel"> ---- </label>
+                <label style="color:red"> MIN TEMPERATURE :</label>
+                <label id="minlabel"> ---- </label>
+                <label style="color:red"> MAX TEMPERATURE :</label>
+                <label id="maxlabel"> ---- </label>
+                <label style="color:red"> SKY STATUS :</label>
+                <label id="skylabel"> ---- </label>
+                <label style="color:red"> WIND SPEED :</label>
+                <label id="windlabel"> ---- </label>
+                <label style="color:red"> HUMIDITY :</label>
+                <label id="humidlabel"> ---- </label>
+        </fieldset>
+        
+    </body>
+</html>

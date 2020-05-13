@@ -1,0 +1,17 @@
+{
+  "name": "proiectcloud",
+  "version": "1.0.0",
+  "description": "proiect la cloud computing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "georgeburlacu",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "jquery": "^3.5.1",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
