@@ -12,6 +12,7 @@
         var latg;
         var longg;
         
+        
         function dateVreme(latitudeVreme, longitudeVreme)
         {
             $.ajax({
@@ -24,7 +25,7 @@
                 latitude: latitudeVreme,
                 longitude: longitudeVreme,
                 oneobservation: 'true',
-                apiKey: 'mSu-e7R5n0wp9JZk4ScsKXacmeaS2DlB_OWG791AhIE'
+                apiKey: 'izYttMFXCUQRlEzMj96uKGz_Tspf5-2Gf0v_dpSJb3Q'
             },
             success: function (data) {
                 var tempj = data.observations.location[0].observation[0].temperature;
