@@ -9,7 +9,7 @@
   "author": "georgeburlacu",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "jquery": "^3.5.1",
     "xmlhttprequest": "^1.8.0"
